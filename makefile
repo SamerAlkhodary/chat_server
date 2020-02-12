@@ -1,4 +1,4 @@
-setup: 
+start: 
 	go build -o run/out
 	docker build run/ -t server
 	clear
