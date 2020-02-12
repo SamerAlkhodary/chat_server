@@ -1,0 +1,70 @@
+syntax = "proto3";
+package proto;
+service Messinger {
+    rpc signup (SignupRequest) returns (SignupResponse);
+    rpc addFriend (AddFriendRequest) returns (AddFriendResponse);
+    rpc sendMessage (Message) returns (Close);
+    rpc createStream (RegisterRequest) returns (stream Message);
+    rpc uploadMedia(stream Message) returns (  MediaResponse);
+   // rpc downloadMedia (Empty) returns (stream Message);
+   
+}
+message Empty{
+
+}
+message RegisterRequest {
+    User user=1;
+    bool active=2;
+}
+
+message LogoutRequest {
+    string id=1;
+}
+message Close {
+}
+message User {
+    string id=1;
+    string name=2;
+    bytes profile_pic=3;
+}
+message Message {
+    
+    string sender_id=1;
+    string target_id=2;
+    string body=3;
+    string timestamp=4;
+    bool read=5;
+    Media  media = 6;
+}
+message Media{
+    oneof data{
+        
+        int32 chunkSize = 4;
+        bytes image=1;
+        bytes video=2;
+        bytes file=3;
+        bool empty=5;
+
+    }
+}
+message MediaResponse {
+    bool done=1;
+    string error=2;
+}
+
+message SignupRequest{
+    User user=1;
+}
+message SignupResponse {
+    bool done=1;
+    string msg=2;
+}
+message AddFriendRequest {
+    string id=1;
+}
+message AddFriendResponse {
+    bool done=1;
+    User user = 2;
+    string msg=3;
+}
+
